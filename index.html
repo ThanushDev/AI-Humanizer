@@ -3,63 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Text Humanizer | Digi Solutions</title>
+    <title>AI Humanizer | Digi Solutions</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+        
+        body { 
+            font-family: 'Space Grotesk', sans-serif; 
+            background-color: #0f172a; 
+            color: #f8fafc; 
+            overflow-x: hidden; 
+        }
+        
+        /* High-Tech Grid Background */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+        }
+
+        /* Glassmorphism Panels */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s ease-in-out;
+        }
+        
+        .glass-panel:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+        }
+
+        /* Neon Glow Effects */
+        .neon-focus:focus {
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+            border-color: #38bdf8;
+        }
+        .neon-focus-success:focus {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+            border-color: #10b981;
+        }
+        
+        /* Button Pulse Animation */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+            50% { box-shadow: 0 0 35px rgba(56, 189, 248, 0.8); }
+        }
+        .btn-glow { animation: pulse-glow 2s infinite; }
+        
+        /* Custom Scrollbar for Textareas */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #0284c7; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-900">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative">
+    
+    <div class="bg-grid"></div>
 
-    <div class="max-w-6xl mx-auto px-4 py-12">
-        <div class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-blue-700 mb-4 tracking-tight">
-                ✨ AI Text Humanizer
+    <div class="w-full max-w-7xl z-10">
+        
+        <div class="text-center mb-8 md:mb-12 animate-[fadeIn_1s_ease-in]">
+            <h1 class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-blue-600 mb-3 drop-shadow-lg tracking-tight">
+                <i class="fa-solid fa-microchip mr-3 text-sky-500"></i>AI Text Humanizer
             </h1>
-            <p class="text-slate-500 text-lg max-w-2xl mx-auto">
-                Convert your ChatGPT or AI-generated content into natural, human-like writing in seconds. 
+            <p class="text-sky-200 text-sm md:text-lg font-medium tracking-widest uppercase opacity-80">
+                Advanced Neural Rewriting Engine
             </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
             
-            <div class="flex flex-col space-y-2">
-                <div class="flex justify-between items-center px-2">
-                    <span class="font-bold text-slate-700">AI Generated Text</span>
-                    <span id="charCount" class="text-xs text-slate-400 font-medium uppercase tracking-wider">0 Characters</span>
+            <div class="glass-panel rounded-2xl p-5 md:p-7 flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <label class="text-sky-400 font-semibold text-base md:text-lg flex items-center">
+                        <i class="fa-solid fa-robot mr-2"></i> Raw AI Output
+                    </label>
+                    <span id="charCount" class="bg-slate-800 text-sky-300 text-xs px-3 py-1 rounded-full border border-sky-900 shadow-inner">
+                        0 Chars
+                    </span>
                 </div>
                 <textarea id="inputText" 
-                    class="w-full h-80 md:h-[450px] p-6 rounded-3xl border border-slate-200 shadow-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all resize-none text-slate-700 text-lg leading-relaxed" 
-                    placeholder="Paste your AI content here..."></textarea>
+                    class="w-full h-64 md:h-[400px] bg-slate-900/80 text-slate-100 p-5 rounded-xl border border-slate-700 neon-focus outline-none transition-all resize-none font-mono text-sm md:text-base leading-relaxed"
+                    placeholder="Initialize text input sequence here..."></textarea>
             </div>
 
-            <div class="flex flex-col space-y-2">
-                <div class="flex justify-between items-center px-2">
-                    <span class="font-bold text-slate-700">Humanized Output</span>
-                    <button onclick="copyOutput()" class="text-blue-600 text-sm font-bold hover:underline">Copy All</button>
+            <div class="glass-panel rounded-2xl p-5 md:p-7 flex flex-col relative group">
+                <div class="flex justify-between items-center mb-4">
+                    <label class="text-emerald-400 font-semibold text-base md:text-lg flex items-center">
+                        <i class="fa-solid fa-user-astronaut mr-2"></i> Humanized Matrix
+                    </label>
+                    <button onclick="copyOutput()" class="text-slate-300 hover:text-emerald-400 transition flex items-center text-xs md:text-sm font-bold bg-slate-800 px-4 py-1.5 rounded-full border border-slate-600 hover:border-emerald-500 hover:bg-slate-700 active:scale-95">
+                        <i class="fa-regular fa-copy mr-2"></i>Copy
+                    </button>
                 </div>
-                <div class="relative flex-grow">
-                    <textarea id="outputText" readonly
-                        class="w-full h-80 md:h-[450px] p-6 rounded-3xl border border-slate-200 bg-white shadow-sm outline-none resize-none text-slate-700 text-lg leading-relaxed" 
-                        placeholder="Your natural text will appear here..."></textarea>
-                </div>
+                <textarea id="outputText" readonly
+                    class="w-full h-64 md:h-[400px] bg-slate-900/80 text-emerald-50 p-5 rounded-xl border border-slate-700 neon-focus-success outline-none transition-all resize-none font-mono text-sm md:text-base leading-relaxed cursor-default"
+                    placeholder="Awaiting processing..."></textarea>
             </div>
         </div>
 
-        <div class="mt-12 text-center">
+        <div class="mt-10 flex flex-col items-center">
             <button onclick="processHumanize()" id="mainBtn" 
-                class="bg-blue-600 hover:bg-blue-700 text-white px-14 py-5 rounded-full text-xl font-black shadow-2xl transform hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-                Humanize Content
+                class="group relative px-8 md:px-12 py-4 md:py-5 bg-gradient-to-r from-sky-500 to-blue-700 text-white text-lg md:text-xl font-bold rounded-full overflow-hidden btn-glow transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100 disabled:cursor-not-allowed border-2 border-sky-300/50 shadow-2xl">
+                <span class="relative z-10 flex items-center">
+                    <i class="fa-solid fa-bolt mr-3" id="btnIcon"></i> <span id="btnText">Execute Humanization</span>
+                </span>
+                <div class="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-700 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
             </button>
-            <p id="loadingStatus" class="mt-4 text-sm text-blue-500 font-medium hidden animate-pulse">
-                Analyzing patterns and rewriting... Please wait.
-            </p>
+            
+            <div id="loadingStatus" class="hidden mt-6 flex items-center space-x-3 text-sky-400 font-bold tracking-widest text-sm md:text-base">
+                <i class="fa-solid fa-circle-notch fa-spin text-2xl drop-shadow-[0_0_10px_rgba(56,189,248,0.8)]"></i>
+                <span class="animate-pulse">BYPASSING AI DETECTION...</span>
+            </div>
         </div>
 
-        <footer class="mt-20 border-t border-slate-200 pt-8 text-center text-slate-400 text-sm">
-            <p>© 2026 Digi Solutions. Powered by Llama 3 & Cloudflare.</p>
+        <footer class="mt-16 text-center text-slate-500 text-xs md:text-sm pb-6">
+            <div class="h-px w-1/4 bg-gradient-to-r from-transparent via-slate-600 to-transparent mx-auto mb-4"></div>
+            <p>Engineered by <span class="text-sky-400 font-bold tracking-wide">Digi Solutions</span> | <i class="fa-solid fa-shield-halved text-emerald-500 mx-1"></i> Secure API</p>
         </footer>
     </div>
 
@@ -67,30 +136,36 @@
         const inputEl = document.getElementById('inputText');
         const outputEl = document.getElementById('outputText');
         const btnEl = document.getElementById('mainBtn');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
         const statusEl = document.getElementById('loadingStatus');
         const charCountEl = document.getElementById('charCount');
 
-        // Character counter
+        // Typing character counter animation
         inputEl.addEventListener('input', () => {
-            charCountEl.innerText = `${inputEl.value.length} Characters`;
+            charCountEl.innerText = `${inputEl.value.length} Chars`;
+            charCountEl.classList.add('text-white', 'bg-sky-600');
+            setTimeout(() => charCountEl.classList.remove('text-white', 'bg-sky-600'), 200);
         });
 
         async function processHumanize() {
             const textValue = inputEl.value.trim();
 
             if (!textValue || textValue.length < 10) {
-                alert("Please paste some text first (minimum 10 characters).");
+                alert("Please initialize input with at least 10 characters.");
                 return;
             }
 
-            // Start Loading State
+            // Tech-Style Loading State
             btnEl.disabled = true;
-            btnEl.innerText = "Processing...";
+            btnEl.classList.remove('btn-glow');
+            btnText.innerText = "Processing Data...";
+            btnIcon.className = "fa-solid fa-radar fa-spin mr-3";
             statusEl.classList.remove('hidden');
             outputEl.value = "";
 
             try {
-                // Cloudflare Worker API URL
+                // ඔයාගේ Cloudflare Worker API URL එක
                 const apiUrl = 'https://ai-humanize.thanushnethsika555.workers.dev';
 
                 const response = await fetch(apiUrl, {
@@ -99,32 +174,58 @@
                     body: JSON.stringify({ text: textValue })
                 });
 
-                if (!response.ok) throw new Error('Server error');
+                if (!response.ok) throw new Error('API Sync Failed');
 
                 const data = await response.json();
                 
                 if (data.result) {
-                    outputEl.value = data.result;
+                    typeWriterEffect(data.result); // Animate the output
                 } else {
-                    alert("The API returned an empty result. Check your Groq key.");
+                    alert("System Error: Empty matrix returned.");
                 }
 
             } catch (err) {
                 console.error(err);
-                alert("Error: Backend is not responding. Ensure your Cloudflare Worker is deployed and the URL is correct.");
+                alert("Connection Error: Cloudflare Worker unreachable. Check system status.");
             } finally {
-                // End Loading State
+                // Reset State
                 btnEl.disabled = false;
-                btnEl.innerText = "Humanize Content";
+                btnEl.classList.add('btn-glow');
+                btnText.innerText = "Execute Humanization";
+                btnIcon.className = "fa-solid fa-bolt mr-3";
                 statusEl.classList.add('hidden');
             }
+        }
+
+        // Hacker/Terminal style typewriter effect for the output
+        function typeWriterEffect(text) {
+            outputEl.value = "";
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    outputEl.value += text.charAt(i);
+                    i++;
+                    outputEl.scrollTop = outputEl.scrollHeight; // Auto-scroll down
+                    setTimeout(type, 5); // Typing speed
+                }
+            }
+            type();
         }
 
         async function copyOutput() {
             if (!outputEl.value) return;
             try {
                 await navigator.clipboard.writeText(outputEl.value);
-                alert("Copied to clipboard!");
+                const originalText = document.querySelector('.fa-copy').nextSibling.textContent;
+                document.querySelector('.fa-copy').nextSibling.textContent = " Copied!";
+                document.querySelector('.fa-copy').classList.replace('fa-regular', 'fa-solid');
+                document.querySelector('.fa-copy').classList.add('text-emerald-400');
+                
+                setTimeout(() => {
+                    document.querySelector('.fa-copy').nextSibling.textContent = originalText;
+                    document.querySelector('.fa-copy').classList.replace('fa-solid', 'fa-regular');
+                    document.querySelector('.fa-copy').classList.remove('text-emerald-400');
+                }, 2000);
             } catch (err) {
                 outputEl.select();
                 document.execCommand('copy');
