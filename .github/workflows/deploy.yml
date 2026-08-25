@@ -3,7 +3,7 @@ name: Deploy Pages with Groq API Secret
 on:
   push:
     branches:
-      - main  
+      - main  # master නම් master කියලා වෙනස් කරන්න
   workflow_dispatch:
 
 permissions:
@@ -30,7 +30,7 @@ jobs:
           GROQ_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           if [ -z "$GROQ_KEY" ]; then
-            echo "ERROR: GROQ_API_KEY secret is missing in Repository Secrets!"
+            echo "::error::GROQ_API_KEY secret is missing in Repository Secrets!"
             exit 1
           fi
           python3 -c "
@@ -38,10 +38,11 @@ jobs:
           key = os.environ.get('GROQ_KEY', '')
           with open('index.html', 'r') as f:
               content = f.read()
-          content = content.replace('GROQ_API_KEY_PLACEHOLDER', key)
+          new_content = content.replace('GROQ_API_KEY_PLACEHOLDER', key)
           with open('index.html', 'w') as f:
-              f.write(content)
+              f.write(new_content)
           "
+          echo "Injection Completed Successfully"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
