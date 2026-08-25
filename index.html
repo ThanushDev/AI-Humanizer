@@ -141,6 +141,9 @@
         const statusEl = document.getElementById('loadingStatus');
         const charCountEl = document.getElementById('charCount');
 
+        // ⚠️ Placeholder for GitHub Action Secrets Injection
+        const API_KEY = "GROQ_API_KEY_PLACEHOLDER";
+
         // Typing character counter animation
         inputEl.addEventListener('input', () => {
             charCountEl.innerText = `${inputEl.value.length} Chars`;
@@ -165,28 +168,44 @@
             outputEl.value = "";
 
             try {
-                // ඔයාගේ Cloudflare Worker API URL එක
-                const apiUrl = 'https://ai-humanize.thanushnethsika555.workers.dev';
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: textValue })
+                // Direct Groq API Integration (LLaMA 3.3 Versatile Model)
+                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-versatile",
+                        messages: [
+                            {
+                                role: "system",
+                                content: "Rephrase and humanize the user input to make it sound completely natural, clear, professional, and engaging. Bypass AI detection patterns while strictly keeping the core meaning intact. Output ONLY the humanized final text without any intros, notes, or explanations."
+                            },
+                            {
+                                role: "user",
+                                content: textValue
+                            }
+                        ],
+                        temperature: 0.7
+                    })
                 });
 
-                if (!response.ok) throw new Error('API Sync Failed');
-
                 const data = await response.json();
-                
-                if (data.result) {
-                    typeWriterEffect(data.result); // Animate the output
+
+                if (!response.ok) throw new Error(data.error?.message || 'Groq API Call Failed');
+
+                const resultText = data.choices[0]?.message?.content;
+
+                if (resultText) {
+                    typeWriterEffect(resultText);
                 } else {
                     alert("System Error: Empty matrix returned.");
                 }
 
             } catch (err) {
                 console.error(err);
-                alert("Connection Error: Cloudflare Worker unreachable. Check system status.");
+                alert("Connection Error: " + err.message);
             } finally {
                 // Reset State
                 btnEl.disabled = false;
@@ -205,8 +224,8 @@
                 if (i < text.length) {
                     outputEl.value += text.charAt(i);
                     i++;
-                    outputEl.scrollTop = outputEl.scrollHeight; // Auto-scroll down
-                    setTimeout(type, 5); // Typing speed
+                    outputEl.scrollTop = outputEl.scrollHeight;
+                    setTimeout(type, 5);
                 }
             }
             type();
