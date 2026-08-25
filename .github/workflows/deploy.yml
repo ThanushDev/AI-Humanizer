@@ -30,10 +30,11 @@ jobs:
           GROQ_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           if [ -z "$GROQ_KEY" ]; then
-            echo "::error::GROQ_API_KEY secret is missing in Repository Secrets!"
+            echo "❌ ERROR: GROQ_API_KEY is completely EMPTY!"
             exit 1
-          fi
-          python3 -c "
+          else
+            echo "✅ SUCCESS: GROQ_API_KEY is found!"
+            python3 -c "
           import os
           key = os.environ.get('GROQ_KEY', '')
           with open('index.html', 'r') as f:
@@ -42,7 +43,7 @@ jobs:
           with open('index.html', 'w') as f:
               f.write(new_content)
           "
-          echo "Injection Completed Successfully"
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
