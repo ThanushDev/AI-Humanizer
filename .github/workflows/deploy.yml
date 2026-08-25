@@ -28,8 +28,15 @@ jobs:
         env:
           GROQ_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
-          sed -i "s|GROQ_API_KEY_PLACEHOLDER|${GROQ_KEY}|g" index.html
-
+          python3 -c "
+          import os
+          key = os.environ.get('GROQ_KEY', '')
+          with open('index.html', 'r') as f:
+              content = f.read()
+          content = content.replace('GROQ_API_KEY_PLACEHOLDER', key)
+          with open('index.html', 'w') as f:
+              f.write(content)
+          "
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
